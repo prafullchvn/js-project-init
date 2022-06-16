@@ -1,0 +1,37 @@
+#! /bin/bash
+
+function createReadme(){
+  local projectName=$1
+
+  echo -e "# ${projectName}" > readme.md
+}
+
+function createTodo(){
+  echo -e "# todo\n\n # done\n" > todo.md
+}
+
+function initializeGit(){
+  local projectPath=$1
+  git init
+}
+
+function createProject() {
+  local projectName=$1
+  [[ $projectName == '' ]] && echo "No project name specified" && return 
+  
+  local projectPath="$(pwd)/${projectName}"
+  mkdir "${projectPath}"
+  mkdir "${projectPath}/src"
+  mkdir "${projectPath}/test"
+  touch "${projectPath}/.gitignore"
+  touch "${projectPath}/index.js"
+
+  cd "${projectPath}"
+  initializeGit $projectPath
+  createTodo 
+  createReadme $projectName
+
+  echo "Created project at ${projectPath}"
+}
+
+createProject $1
